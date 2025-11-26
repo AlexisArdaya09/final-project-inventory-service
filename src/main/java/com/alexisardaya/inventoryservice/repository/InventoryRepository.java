@@ -1,6 +1,6 @@
 package com.alexisardaya.inventoryservice.repository;
 
-import com.alexisardaya.inventoryservice.model.entity.InventoryItem;
+import com.alexisardaya.inventoryservice.model.InventoryItem;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

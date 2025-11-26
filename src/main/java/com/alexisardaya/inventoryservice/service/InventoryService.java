@@ -1,12 +1,14 @@
 package com.alexisardaya.inventoryservice.service;
 
+import com.alexisardaya.inventoryservice.dto.InventoryItemRequest;
+import com.alexisardaya.inventoryservice.dto.InventoryItemResponse;
+import com.alexisardaya.inventoryservice.exception.InventoryItemAlreadyExistsException;
+import com.alexisardaya.inventoryservice.exception.ResourceNotFoundException;
 import com.alexisardaya.inventoryservice.kafka.event.InventoryUpdatedEvent;
 import com.alexisardaya.inventoryservice.kafka.event.OrderCancelledEvent;
 import com.alexisardaya.inventoryservice.kafka.event.OrderConfirmedEvent;
 import com.alexisardaya.inventoryservice.kafka.producer.InventoryEventProducer;
-import com.alexisardaya.inventoryservice.model.dto.InventoryItemRequest;
-import com.alexisardaya.inventoryservice.model.dto.InventoryItemResponse;
-import com.alexisardaya.inventoryservice.model.entity.InventoryItem;
+import com.alexisardaya.inventoryservice.model.InventoryItem;
 import com.alexisardaya.inventoryservice.repository.InventoryRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,8 +41,7 @@ public class InventoryService {
 
     // Verificar que no exista ya un item para este producto
     if (inventoryRepository.existsByProductId(request.getProductId())) {
-      throw new RuntimeException(
-          "Inventory item already exists for productId: " + request.getProductId());
+      throw InventoryItemAlreadyExistsException.forProductId(request.getProductId());
     }
 
     InventoryItem item = new InventoryItem(
@@ -74,7 +75,7 @@ public class InventoryService {
   public InventoryItemResponse getInventoryItemById(Long id) {
     log.debug("Fetching inventory item by id: {}", id);
     InventoryItem item = inventoryRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Inventory item not found with id: " + id));
+        .orElseThrow(() -> ResourceNotFoundException.inventoryItem(id));
     return toResponse(item);
   }
 
@@ -85,8 +86,7 @@ public class InventoryService {
   public InventoryItemResponse getInventoryItemByProductId(Long productId) {
     log.debug("Fetching inventory item by productId: {}", productId);
     InventoryItem item = inventoryRepository.findByProductId(productId)
-        .orElseThrow(
-            () -> new RuntimeException("Inventory item not found for productId: " + productId));
+        .orElseThrow(() -> ResourceNotFoundException.inventoryItemByProductId(productId));
     return toResponse(item);
   }
 
@@ -97,7 +97,7 @@ public class InventoryService {
   public void deleteInventoryItem(Long id) {
     log.info("Deleting inventory item with id: {}", id);
     if (!inventoryRepository.existsById(id)) {
-      throw new RuntimeException("Inventory item not found with id: " + id);
+      throw ResourceNotFoundException.inventoryItem(id);
     }
     inventoryRepository.deleteById(id);
     log.info("Inventory item deleted: id={}", id);
@@ -117,9 +117,7 @@ public class InventoryService {
     try {
       // 1. Buscar item de inventario
       InventoryItem item = inventoryRepository.findByProductId(event.getProductId())
-          .orElseThrow(() -> new RuntimeException(
-              "Inventory item not found for productId: " + event.getProductId()
-          ));
+          .orElseThrow(() -> ResourceNotFoundException.inventoryItemByProductId(event.getProductId()));
 
       log.debug("Current stock before reservation: availableStock={}, reservedStock={}",
           item.getAvailableStock(), item.getReservedStock());

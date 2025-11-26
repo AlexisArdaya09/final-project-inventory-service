@@ -1,7 +1,7 @@
 package com.alexisardaya.inventoryservice.controller;
 
-import com.alexisardaya.inventoryservice.model.dto.InventoryItemRequest;
-import com.alexisardaya.inventoryservice.model.dto.InventoryItemResponse;
+import com.alexisardaya.inventoryservice.dto.InventoryItemRequest;
+import com.alexisardaya.inventoryservice.dto.InventoryItemResponse;
 import com.alexisardaya.inventoryservice.service.InventoryService;
 import jakarta.validation.Valid;
 import java.util.List;
