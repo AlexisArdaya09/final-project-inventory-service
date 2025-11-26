@@ -8,32 +8,51 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  messages:
+    basename: ValidationMessages
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: inventory-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: orderPlacedEvent:com.alexisardaya.inventoryservice.kafka.event.OrderPlacedEvent
+        spring.json.trusted.packages: com.alexisardaya.*
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: orderConfirmedEvent:com.alexisardaya.inventoryservice.kafka.event.OrderConfirmedEvent,orderCancelledEvent:com.alexisardaya.inventoryservice.kafka.event.OrderCancelledEvent,inventoryUpdatedEvent:com.alexisardaya.inventoryservice.kafka.event.InventoryUpdatedEvent
 
 server:
-  port: 8083
+  port: ${SERVER_PORT:8083}
 
 logging:
   level:
-    com.alexisardaya.inventoryservice: DEBUG
-    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
 
-kafka:
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-  consumer:
-    group-id: inventory-service
-    auto-offset-reset: earliest
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-    properties:
-      spring.json.type.mapping: orderPlacedEvent:event.kafka.com.alexisardaya.inventoryservice.OrderPlacedEvent
-      spring.json.trusted.packages: com.alexisardaya.*
-  producer:
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    properties:
-      spring.json.type.mapping: orderPlacedEvent:event.kafka.com.alexisardaya.inventoryservice.OrderPlacedEvent, orderCancelledEvent:event.kafka.com.alexisardaya.inventoryservice.OrderCancelledEvent,orderConfirmedEvent:event.kafka.com.alexisardaya.inventoryservice.OrderConfirmedEvent, inventoryUpdatedEvent:event.kafka.com.alexisardaya.inventoryservice.InventoryUpdatedEvent
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: always
+  health:
+    kafka:
+      enabled: true
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: Inventory Service
+    description: Microservicio de gestión de inventario
+    version: 1.0.0
