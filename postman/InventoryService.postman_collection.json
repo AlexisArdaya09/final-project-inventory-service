@@ -1,0 +1,589 @@
+{
+	"info": {
+		"_postman_id": "inventory-service-collection",
+		"name": "Inventory Service API",
+		"description": "Colección de endpoints para el microservicio de Inventory Service con ejemplos positivos y negativos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Create Inventory Item",
+					"item": [
+						{
+							"name": "✅ Caso Exitoso",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": 50\n}"
+								},
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory"]
+								},
+								"description": "Crea un nuevo item de inventario con datos válidos"
+							},
+							"response": [
+								{
+									"name": "Success 201",
+									"originalRequest": {
+										"method": "POST",
+										"header": [{"key": "Content-Type", "value": "application/json"}],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": 50\n}"
+										},
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory"]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"id\": 1,\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"availableStock\": 50,\n  \"reservedStock\": 0,\n  \"totalStock\": 50,\n  \"createdAt\": \"2024-01-15T10:30:00Z\",\n  \"updatedAt\": \"2024-01-15T10:30:00Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "❌ Validación: ProductId nulo",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productId\": null,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": 50\n}"
+								},
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory"]
+								},
+								"description": "Intenta crear un item de inventario con productId nulo"
+							},
+							"response": [
+								{
+									"name": "Validation Error 400",
+									"originalRequest": {
+										"method": "POST",
+										"header": [{"key": "Content-Type", "value": "application/json"}],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"productId\": null,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": 50\n}"
+										},
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory"]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 400,\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"productId: El ID del producto es obligatorio\",\n  \"path\": \"/api/inventory\"\n}"
+								}
+							]
+						},
+						{
+							"name": "❌ Validación: ProductName vacío",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productId\": 1,\n  \"productName\": \"\",\n  \"initialStock\": 50\n}"
+								},
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory"]
+								},
+								"description": "Intenta crear un item de inventario con productName vacío"
+							},
+							"response": [
+								{
+									"name": "Validation Error 400",
+									"originalRequest": {
+										"method": "POST",
+										"header": [{"key": "Content-Type", "value": "application/json"}],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"productId\": 1,\n  \"productName\": \"\",\n  \"initialStock\": 50\n}"
+										},
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory"]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 400,\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"productName: El nombre del producto es obligatorio\",\n  \"path\": \"/api/inventory\"\n}"
+								}
+							]
+						},
+						{
+							"name": "❌ Validación: Stock inicial negativo",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": -5\n}"
+								},
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory"]
+								},
+								"description": "Intenta crear un item de inventario con stock inicial negativo"
+							},
+							"response": [
+								{
+									"name": "Validation Error 400",
+									"originalRequest": {
+										"method": "POST",
+										"header": [{"key": "Content-Type", "value": "application/json"}],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": -5\n}"
+										},
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory"]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 400,\n  \"code\": \"VALIDATION_ERROR\",\n  \"message\": \"initialStock: El stock inicial no puede ser negativo\",\n  \"path\": \"/api/inventory\"\n}"
+								}
+							]
+						},
+						{
+							"name": "❌ Error: Item duplicado",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": 50\n}"
+								},
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory"]
+								},
+								"description": "Intenta crear un item de inventario para un productId que ya existe"
+							},
+							"response": [
+								{
+									"name": "Conflict 409",
+									"originalRequest": {
+										"method": "POST",
+										"header": [{"key": "Content-Type", "value": "application/json"}],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"initialStock\": 50\n}"
+										},
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory"]
+										}
+									},
+									"status": "Conflict",
+									"code": 409,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 409,\n  \"code\": \"INVENTORY_ITEM_EXISTS\",\n  \"message\": \"Ya existe un item de inventario para el productId: 1\",\n  \"path\": \"/api/inventory\"\n}"
+								}
+							]
+						}
+					],
+					"description": "Crea un nuevo item de inventario"
+				},
+				{
+					"name": "Get All Inventory Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrlInventoryService}}/api/inventory",
+							"host": ["{{baseUrlInventoryService}}"],
+							"path": ["api", "inventory"]
+						},
+						"description": "Obtiene todos los items de inventario"
+					},
+					"response": [
+						{
+							"name": "Success 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": 1,\n    \"productId\": 1,\n    \"productName\": \"Laptop Dell XPS 15\",\n    \"availableStock\": 50,\n    \"reservedStock\": 0,\n    \"totalStock\": 50,\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"updatedAt\": \"2024-01-15T10:30:00Z\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Inventory Item by ID",
+					"item": [
+						{
+							"name": "✅ Caso Exitoso",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory/:id",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory", ":id"],
+									"variable": [{"key": "id", "value": "1"}]
+								},
+								"description": "Obtiene un item de inventario existente por su ID"
+							},
+							"response": [
+								{
+									"name": "Success 200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory/1",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory", "1"]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"id\": 1,\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"availableStock\": 50,\n  \"reservedStock\": 0,\n  \"totalStock\": 50,\n  \"createdAt\": \"2024-01-15T10:30:00Z\",\n  \"updatedAt\": \"2024-01-15T10:30:00Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "❌ Error: Item no encontrado",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory/:id",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory", ":id"],
+									"variable": [{"key": "id", "value": "999"}]
+								},
+								"description": "Intenta obtener un item de inventario que no existe"
+							},
+							"response": [
+								{
+									"name": "Not Found 404",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory/999",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory", "999"]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 404,\n  \"code\": \"RESOURCE_NOT_FOUND\",\n  \"message\": \"Item de inventario 999 no encontrado\",\n  \"path\": \"/api/inventory/999\"\n}"
+								}
+							]
+						}
+					],
+					"description": "Obtiene un item de inventario por su ID"
+				},
+				{
+					"name": "Get Inventory Item by Product ID",
+					"item": [
+						{
+							"name": "✅ Caso Exitoso",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory/product/:productId",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory", "product", ":productId"],
+									"variable": [{"key": "productId", "value": "1"}]
+								},
+								"description": "Obtiene un item de inventario existente por productId"
+							},
+							"response": [
+								{
+									"name": "Success 200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory/product/1",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory", "product", "1"]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"id\": 1,\n  \"productId\": 1,\n  \"productName\": \"Laptop Dell XPS 15\",\n  \"availableStock\": 50,\n  \"reservedStock\": 0,\n  \"totalStock\": 50,\n  \"createdAt\": \"2024-01-15T10:30:00Z\",\n  \"updatedAt\": \"2024-01-15T10:30:00Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "❌ Error: Item no encontrado",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory/product/:productId",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory", "product", ":productId"],
+									"variable": [{"key": "productId", "value": "999"}]
+								},
+								"description": "Intenta obtener un item de inventario para un productId que no existe"
+							},
+							"response": [
+								{
+									"name": "Not Found 404",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory/product/999",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory", "product", "999"]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 404,\n  \"code\": \"RESOURCE_NOT_FOUND\",\n  \"message\": \"Item de inventario no encontrado para productId: 999\",\n  \"path\": \"/api/inventory/product/999\"\n}"
+								}
+							]
+						}
+					],
+					"description": "Obtiene un item de inventario por productId"
+				},
+				{
+					"name": "Delete Inventory Item",
+					"item": [
+						{
+							"name": "✅ Caso Exitoso",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory/:id",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory", ":id"],
+									"variable": [{"key": "id", "value": "1"}]
+								},
+								"description": "Elimina un item de inventario existente"
+							},
+							"response": [
+								{
+									"name": "No Content 204",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory/1",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory", "1"],
+											"variable": [{"key": "id", "value": "1"}]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "json",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "❌ Error: Item no encontrado",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/api/inventory/:id",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["api", "inventory", ":id"],
+									"variable": [{"key": "id", "value": "999"}]
+								},
+								"description": "Intenta eliminar un item de inventario que no existe"
+							},
+							"response": [
+								{
+									"name": "Not Found 404",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrlInventoryService}}/api/inventory/999",
+											"host": ["{{baseUrlInventoryService}}"],
+											"path": ["api", "inventory", "999"],
+											"variable": [{"key": "id", "value": "999"}]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [{"key": "Content-Type", "value": "application/json"}],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"status\": 404,\n  \"code\": \"RESOURCE_NOT_FOUND\",\n  \"message\": \"Item de inventario 999 no encontrado\",\n  \"path\": \"/api/inventory/999\"\n}"
+								}
+							]
+						}
+					],
+					"description": "Elimina un item de inventario por su ID"
+				}
+			],
+			"description": "Endpoints para gestión de inventario"
+		},
+		{
+			"name": "Health & Info",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrlInventoryService}}/actuator/health",
+							"host": ["{{baseUrlInventoryService}}"],
+							"path": ["actuator", "health"]
+						},
+						"description": "Verifica el estado de salud del servicio"
+					},
+					"response": [
+						{
+							"name": "Success 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/actuator/health",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["actuator", "health"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"cookie": [],
+							"body": "{\n  \"status\": \"UP\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Service Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrlInventoryService}}/actuator/info",
+							"host": ["{{baseUrlInventoryService}}"],
+							"path": ["actuator", "info"]
+						},
+						"description": "Obtiene información del servicio"
+					},
+					"response": [
+						{
+							"name": "Success 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrlInventoryService}}/actuator/info",
+									"host": ["{{baseUrlInventoryService}}"],
+									"path": ["actuator", "info"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"cookie": [],
+							"body": "{\n  \"app\": {\n    \"name\": \"Inventory Service\",\n    \"description\": \"Microservicio de gestión de inventario\",\n    \"version\": \"1.0.0\"\n  }\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints de Spring Boot Actuator"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrlInventoryService",
+			"value": "http://localhost:8083",
+			"type": "string"
+		}
+	]
+}
+
